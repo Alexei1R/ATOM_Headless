@@ -12,6 +12,8 @@ set(SOURCES
         ATOM/macros.h
         ATOM/Core/Logging/Logging.cpp
         ATOM/Core/Logging/Logging.h
+        Networking/Client.cpp
+        Networking/Client.h
 )
 
 

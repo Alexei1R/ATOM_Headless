@@ -19,4 +19,10 @@
 #include <unordered_set>
 
 
+#include <map>
+#include <thread>
+#include <functional>
+
+#include "ATOM/Core/Logging/Logging.h"
+
 #endif //ATOM_ATOMPCH_H

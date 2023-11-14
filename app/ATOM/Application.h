@@ -5,8 +5,8 @@
 #ifndef ATOM_APPLICATION_H
 #define ATOM_APPLICATION_H
 #include "ATOM/atompch.h"
-
-
+#include "Networking/Client.h"
+#include "ATOM/Core/Logging/Logging.h"
 
 namespace Atom {
     class Application {
@@ -19,6 +19,7 @@ namespace Atom {
         void WindowClose();
     private:
         bool m_IsRuning = true;
+        Client* m_Client;
     };
 }
 
