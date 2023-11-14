@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-clang++"
+	BuildStamp="20231114-1143-Experimental"
+	Name="toor"
+	Generator="ctest-3.27.4"
+	CompilerName="/usr/bin/clang++"
+	CompilerVersion="16.0.6"
+	OSName="Linux"
+	Hostname="toor"
+	OSRelease="6.5.0-10-generic"
+	OSVersion="#10-Ubuntu SMP PREEMPT_DYNAMIC Fri Oct 13 13:49:38 UTC 2023"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="25"
+	ModelID="68"
+	ProcessorCacheSize="512"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="4095"
+	TotalPhysicalMemory="15215"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="4577.26"
+	>
+	<Testing>
+		<StartDateTime>Nov 14 13:45 EET</StartDateTime>
+		<StartTestTime>1699962313</StartTestTime>
+		<TestList/>
+		<EndDateTime>Nov 14 13:45 EET</EndDateTime>
+		<EndTestTime>1699962313</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
