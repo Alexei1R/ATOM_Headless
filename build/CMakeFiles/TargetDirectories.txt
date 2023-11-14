@@ -1,4 +1,0 @@
-/home/toor/Desktop/Code/ATOM_Headless/build/CMakeFiles/package.dir
-/home/toor/Desktop/Code/ATOM_Headless/build/CMakeFiles/package_source.dir
-/home/toor/Desktop/Code/ATOM_Headless/build/CMakeFiles/edit_cache.dir
-/home/toor/Desktop/Code/ATOM_Headless/build/CMakeFiles/rebuild_cache.dir

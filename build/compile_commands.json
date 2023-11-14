@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/toor/Desktop/Code/ATOM_Headless/build",
-  "command": "/usr/bin/clang++ -g -o CMakeFiles/ATOM.dir/main.cpp.o -c /home/toor/Desktop/Code/ATOM_Headless/main.cpp",
-  "file": "/home/toor/Desktop/Code/ATOM_Headless/main.cpp",
-  "output": "CMakeFiles/ATOM.dir/main.cpp.o"
-}
-]
