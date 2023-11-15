@@ -19,7 +19,7 @@ namespace Atom {
         void WindowClose();
     private:
         bool m_IsRuning = true;
-        Client* m_Client;
+//        Client* m_Client;
     };
 }
 
