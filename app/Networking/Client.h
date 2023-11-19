@@ -1,9 +1,11 @@
 //
-// Created by toor on 11/14/23.
+// Created by toor on 11/15/23.
 //
 
 #ifndef ATOM_CLIENT_H
 #define ATOM_CLIENT_H
+
+
 #include "ATOM/atompch.h"
 
 #include <steam/steamnetworkingsockets.h>
@@ -87,6 +89,7 @@ namespace Atom {
     };
 
 }
+
 
 
 
