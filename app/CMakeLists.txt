@@ -16,6 +16,10 @@ set(SOURCES
         ATOM/Core/Logging/Logging.h
         Networking/Client.cpp
         Networking/Client.h
+        Networking/Server.h
+        Networking/Server.cpp
+        Networking/Networking.h
+        Networking/Networking.cpp
 
 
 
@@ -28,6 +32,7 @@ set(serial_SRCS
         ATOM/Communication/Serial/Serial.cpp
         ATOM/Communication/Serial/Serial.h
         ATOM/Communication/Serial/impl/v8stdint.h
+        Networking/Server.cpp
 )
 if(APPLE)
  # If OSX

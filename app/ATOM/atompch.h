@@ -25,4 +25,20 @@
 
 #include "ATOM/Core/Logging/Logging.h"
 
+
+#include <steam/steamnetworkingsockets.h>
+#include <steam/isteamnetworkingutils.h>
+#ifndef STEAMNETWORKINGSOCKETS_OPENSOURCE
+#include <steam/steam_api.h>
+#endif
+
+#ifdef _WIN32
+#include <windows.h> // Ug, for NukeProcess -- see below
+#else
+#include <unistd.h>
+#include <signal.h>
+#endif
+
+
+
 #endif //ATOM_ATOMPCH_H
