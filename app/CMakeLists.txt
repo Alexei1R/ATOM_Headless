@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 project(ATOM)
 
 
+find_package(OpenCV REQUIRED )
+
 
 
 set(SOURCES
@@ -55,11 +57,14 @@ endif()
 add_executable(executable_headless ${SOURCES} ${serial_SRCS})
 
 target_link_libraries(executable_headless
-    glm
-    spdlog
-    GameNetworkingSockets
- )
+        glm
+        spdlog
+        GameNetworkingSockets
+        ${OpenCV_LIBS}
+)
 
 
 
 target_include_directories(executable_headless PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/)
+
+
