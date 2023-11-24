@@ -22,9 +22,11 @@ namespace Atom {
     private:
         bool m_IsRuning = true;
 
-        Server* m_Server;
-        cv::VideoCapture cap;
         int frameSizeBytes;
+//        Server* m_Server;
+        cv::Mat frame;
+        cv::VideoCapture cap;
+        cv::VideoWriter m_VideoWriter;
     };
 }
 
