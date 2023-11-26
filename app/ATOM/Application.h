@@ -23,7 +23,7 @@ namespace Atom {
         bool m_IsRuning = true;
 
         int frameSizeBytes;
-//        Server* m_Server;
+        Server* m_Server;
         cv::Mat frame;
         cv::VideoCapture cap;
         cv::VideoWriter m_VideoWriter;
