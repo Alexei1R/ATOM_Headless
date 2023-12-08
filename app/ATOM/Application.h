@@ -7,7 +7,7 @@
 #include "ATOM/atompch.h"
 #include "ATOM/Core/Logging/Logging.h"
 #include "Networking/Server.h"
-
+#include "ATOM/Communication/Serial/Serial.h"
 #include "opencv2/opencv.hpp"
 
 namespace Atom {
@@ -27,6 +27,7 @@ namespace Atom {
         cv::Mat frame;
         cv::VideoCapture cap;
         cv::VideoWriter m_VideoWriter;
+        serial::Serial* m_Serial;
     };
 }
 
