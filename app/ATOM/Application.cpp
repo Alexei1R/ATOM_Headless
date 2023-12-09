@@ -6,6 +6,8 @@
 
 
 namespace Atom {
+
+
     Application* Application::s_Instance = nullptr;
     Application::Application()
     {
@@ -13,8 +15,17 @@ namespace Atom {
 
         m_Interval = std::chrono::milliseconds(250);
 
-        m_SerialCommunication = new SerialCommunication("/dev/ttyUSB0", 9600);
+        m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyUSB0", 9600);
         PushLayer(m_SerialCommunication);
+
+        m_ServerLayer = new ServerLayer(27020);
+        PushLayer(m_ServerLayer);
+        m_ServerLayer->RegisterMessageCallbackWithId(1, [](void * data , unsigned int size) {
+            ATLOG_INFO("Message 1 received");
+
+            //cast data to the type you want
+
+        });
 
 
 

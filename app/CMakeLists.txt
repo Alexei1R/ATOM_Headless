@@ -33,38 +33,40 @@ set(SOURCES
 )
 
 set(serial_SRCS
-        ATOM/Communication/Serial/Serial.cpp
-        ATOM/Communication/Serial/Serial.h
-        ATOM/Communication/Serial/impl/v8stdint.h
+        Communication/Serial/Serial.cpp
+        Communication/Serial/Serial.h
+        Communication/Serial/impl/v8stdint.h
         ATOM/EmbededPlatform/SerialCommunication.cpp
         ATOM/EmbededPlatform/SerialCommunication.h
+        ATOM/Server/Server.cpp
+        ATOM/Server/Server.h
 
 )
 if(APPLE)
  # If OSX
  list(APPEND
-         ATOM/Communication/Serial/impl/unix.cpp
-         ATOM/Communication/Serial/impl/unix.h)
+         Communication/Serial/impl/unix.cpp
+         Communication/Serial/impl/unix.h)
 
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/list_ports/lists_ports_osx.cpp
+         Communication/Serial/impl/list_ports/lists_ports_osx.cpp
  )
 
 elseif(UNIX)
  # If unix
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/unix.cpp
-         ATOM/Communication/Serial/impl/unix.h)
+         Communication/Serial/impl/unix.cpp
+         Communication/Serial/impl/unix.h)
 
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/list_ports/lists_ports_linux.cpp)
+         Communication/Serial/impl/list_ports/lists_ports_linux.cpp)
 else()
  # If windows
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/win.cpp
-         ATOM/Communication/Serial/impl/win.h)
+         Communication/Serial/impl/win.cpp
+         Communication/Serial/impl/win.h)
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/list_ports/lists_ports_win.cpp)
+         Communication/Serial/impl/list_ports/lists_ports_win.cpp)
 endif()
 
 add_executable(executable_headless ${SOURCES} ${serial_SRCS})

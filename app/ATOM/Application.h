@@ -7,6 +7,8 @@
 #include "ATOM/atompch.h"
 #include "ATOM/Core/Logging/Logging.h"
 #include "ATOM/EmbededPlatform/SerialCommunication.h"
+#include "ATOM/Server/Server.h"
+
 
 
 namespace Atom {
@@ -32,7 +34,8 @@ namespace Atom {
         std::chrono::milliseconds m_Interval; // 250 ms
 
 
-        SerialCommunication* m_SerialCommunication;
+        SerialCommunicationLayer* m_SerialCommunication;
+        ServerLayer* m_ServerLayer;
 
     };
 }

@@ -13,7 +13,7 @@
 #include <sstream>
 #include <exception>
 #include <stdexcept>
-#include "ATOM/Communication/Serial/impl/v8stdint.h"
+#include "Communication/Serial/impl/v8stdint.h"
 
 #define THROW(exceptionClass, message) throw exceptionClass(__FILE__, \
 __LINE__, (message) )

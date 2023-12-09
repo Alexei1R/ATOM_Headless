@@ -17,7 +17,7 @@
 #ifdef _WIN32
 #include "ATOM/Communication/Serial/impl/win.h"
 #else
-#include "ATOM/Communication/Serial/impl/unix.h"
+#include "Communication/Serial/impl/unix.h"
 #endif
 
 using std::invalid_argument;

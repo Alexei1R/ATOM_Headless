@@ -25,7 +25,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "ATOM/Communication/Serial/Serial.h"
+#include "Communication/Serial/Serial.h"
 
 using serial::PortInfo;
 using std::istringstream;

@@ -12,8 +12,8 @@
 #ifndef SERIAL_IMPL_UNIX_H
 #define SERIAL_IMPL_UNIX_H
 
-#include "ATOM/Communication/Serial/Serial.h"
-#include "ATOM/Communication/Serial/impl/v8stdint.h"
+#include "Communication/Serial/Serial.h"
+#include "v8stdint.h"
 
 
 #include <pthread.h>
