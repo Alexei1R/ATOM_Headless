@@ -1,7 +1,7 @@
 //
 // Created by toor on 11/14/23.
 //
-
+#include <sys/stat.h> // Include for chmod
 #include "Application.h"
 
 
@@ -11,6 +11,14 @@ namespace Atom {
     Application::Application()
     {
         s_Instance = (Application*)this;
+
+        int result = chmod("/dev/ttyUSB0", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH); // Read/write permissions for user, group, others
+        if (result != 0) {
+            ATLOG_WARN("Failed to change permissions on /dev/ttyUSB0");
+        } else {
+            ATLOG_INFO("Changed permissions on /dev/ttyUSB0");
+        }
+
 
         // Initialize the serial port
         try {
@@ -36,39 +44,6 @@ namespace Atom {
         }
 
 
-//
-//        std::string pipeline = "v4l2src device=/dev/video0 ! video/x-raw,format=YUY2,width=640,height=480,framerate=30/1 ! videoconvert ! appsink";
-//
-//
-//
-//        cap.open(pipeline, cv::CAP_GSTREAMER);
-//
-//        if (!cap.isOpened()) {
-//            ATLOG_WARN("Error opening the camera");
-//        }
-//
-//
-//
-//
-//        m_VideoWriter.open("appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=127.0.0.1 port=5000", 0, cap.get(cv::CAP_PROP_FPS), cv::Size(cap.get(cv::CAP_PROP_FRAME_WIDTH), cap.get(cv::CAP_PROP_FRAME_HEIGHT)), true);
-//
-//
-//        m_Server = new Server(27020);
-//        m_Server->Start();
-//        m_Server->SetClientConnectedCallback([&](const ClientInfo& info) {
-//            ATLOG_INFO("Client Connected: {0}", info.ConnectionDesc);
-//        });
-//        m_Server->SetClientDisconnectedCallback([&](const ClientInfo& info) {
-//            ATLOG_INFO("Client Disconnected: {0}", info.ConnectionDesc);
-//        });
-//
-//        m_Server->SetDataReceivedCallback([&](const ClientInfo& info, const void* data, unsigned int size) {
-//            ATLOG_WARN("[CLIENT] : {0} from {1}: size {2} bytes", (char*)data,info.ConnectionDesc, size);
-//            if(std::string((char*)data) == "echo") {
-//                m_Server->SendDataToClient(info.ID, "Echo msg recived", 5);
-//            }
-//        });
-
 
 
 
@@ -87,34 +62,46 @@ namespace Atom {
 
 
 
-
     void Application::Run()
     {
-
+        std::string accumulatedData;
 
         while (m_IsRuning)
         {
-//            cap >> frame;
-//
-//            if (frame.empty()) {
-//                std::cout << "End of video stream or file" << std::endl;
-//                break;
-//            }
-//
-//
-//
-//            m_VideoWriter.write(frame);
-
             if (m_Serial != nullptr && m_Serial->isOpen()) {
                 if (m_Serial->available()) {
                     std::string data = m_Serial->read();
-                    ATLOG_INFO("Received: {}", data);
+                    accumulatedData += data;
+
+                    size_t start = 0;
+                    size_t newStart = 0;
+                    while ((start = accumulatedData.find('@', start)) != std::string::npos) {
+                        size_t end = accumulatedData.find(";;", start);
+                        if (end != std::string::npos) {
+                            std::string token = accumulatedData.substr(start, end - start);
+                            size_t colonPos = token.find(':');
+                            if (colonPos != std::string::npos && colonPos + 1 < token.length()) {
+                                std::string id = token.substr(1, colonPos - 1);
+                                std::string value = token.substr(colonPos + 1);
+                                ATLOG_INFO("ID: {}, Value: {}", id, value);
+                            }
+                            newStart = end + 2;
+                            start = newStart;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (newStart > 0) {
+                        accumulatedData = accumulatedData.substr(newStart);
+                    }
+
                     m_Serial->flush();
                 }
             }
-
         }
     }
+
 
     void Application::WindowClose() {
         m_IsRuning = false;
