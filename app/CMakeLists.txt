@@ -20,11 +20,15 @@ set(SOURCES
         Networking/Server.cpp
         Networking/Networking.h
         Networking/Networking.cpp
+        ATOM/Core/Layers/Layer.cpp
+        ATOM/Core/Layers/Layer.h
+        ATOM/Core/Layers/LayerStack.cpp
+        ATOM/Core/Layers/LayerStack.h
 
 
 
 
-        ATOM/Communication/Serial/impl/list_ports/lists_ports_osx.cpp
+
 
 )
 
@@ -32,7 +36,9 @@ set(serial_SRCS
         ATOM/Communication/Serial/Serial.cpp
         ATOM/Communication/Serial/Serial.h
         ATOM/Communication/Serial/impl/v8stdint.h
-        Networking/Server.cpp
+        ATOM/EmbededPlatform/SerialCommunication.cpp
+        ATOM/EmbededPlatform/SerialCommunication.h
+
 )
 if(APPLE)
  # If OSX
@@ -41,7 +47,9 @@ if(APPLE)
          ATOM/Communication/Serial/impl/unix.h)
 
  list(APPEND serial_SRCS
-         ATOM/Communication/Serial/impl/list_ports/lists_ports_osx.cpp)
+         ATOM/Communication/Serial/impl/list_ports/lists_ports_osx.cpp
+ )
+
 elseif(UNIX)
  # If unix
  list(APPEND serial_SRCS

@@ -24,6 +24,8 @@
 #include <functional>
 
 #include "ATOM/Core/Logging/Logging.h"
+#include "ATOM/Core/Layers/Layer.h"
+#include "ATOM/Core/Layers/LayerStack.h"
 
 
 #include <steam/steamnetworkingsockets.h>

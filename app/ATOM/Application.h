@@ -6,9 +6,8 @@
 #define ATOM_APPLICATION_H
 #include "ATOM/atompch.h"
 #include "ATOM/Core/Logging/Logging.h"
-#include "Networking/Server.h"
-#include "ATOM/Communication/Serial/Serial.h"
-#include "opencv2/opencv.hpp"
+#include "ATOM/EmbededPlatform/SerialCommunication.h"
+
 
 namespace Atom {
     class Application {
@@ -16,18 +15,25 @@ namespace Atom {
         Application();
         ~Application();
         void Run();
+
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
+
         static Application* s_Instance;
         inline static Application& GetApp() { return *s_Instance; }
         void WindowClose();
     private:
+        LayerStack m_LayerStack;
         bool m_IsRuning = true;
 
-        int frameSizeBytes;
-        Server* m_Server;
-        cv::Mat frame;
-        cv::VideoCapture cap;
-        cv::VideoWriter m_VideoWriter;
-        serial::Serial* m_Serial;
+
+
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_LastTime = std::chrono::high_resolution_clock::now();
+        std::chrono::milliseconds m_Interval; // 250 ms
+
+
+        SerialCommunication* m_SerialCommunication;
+
     };
 }
 
