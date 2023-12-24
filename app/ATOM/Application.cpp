@@ -36,8 +36,8 @@ namespace Atom {
 
 
 
-        cap.open(pipeline, cv::CAP_GSTREAMER);
-
+        // cap.open(pipeline, cv::CAP_GSTREAMER);
+        cap.open("/home/toor/Downloads/pc.mp4");
         if (!cap.isOpened()) {
             ATLOG_WARN("Error opening the camera");
         }
