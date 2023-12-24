@@ -46,7 +46,8 @@ namespace Atom {
 
 
 
-        cap.open(pipeline, cv::CAP_GSTREAMER);
+        // cap.open(pipeline, cv::CAP_GSTREAMER);
+        cap.open(0);
 
         if (!cap.isOpened()) {
             ATLOG_WARN("Error opening the camera");
