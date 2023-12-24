@@ -17,6 +17,7 @@ namespace Atom {
 
     class ServerLayer : public Layer {
     public:
+        using ClientConnectedCallback = std::function<void(const ClientInfo&)>;
         ServerLayer(unsigned int port);
         ~ServerLayer();
 
@@ -24,6 +25,8 @@ namespace Atom {
         virtual void OnDetach() override;
         virtual void OnUpdate() override;
         virtual void OnFixedUpdate() override;
+
+        void OnClientConnectedCallback(std::function<void(const ClientInfo&)> callback) { m_Server->SetClientConnectedCallback(callback); }
 
         void SendMessage(Message message);
 
@@ -34,6 +37,8 @@ namespace Atom {
     private:
         Server* m_Server;
         std::vector<std::pair<uint8_t,std::function<void(void* data, unsigned  int size)>>> m_MessageCallbacks;
+
+
     };
 
 

@@ -8,9 +8,9 @@ namespace Atom {
             : Layer("ServerLayer") {
         m_Server = new Server(port);
         m_Server->Start();
-        m_Server->SetClientConnectedCallback([&](const ClientInfo &info) {
-            ATLOG_INFO("Client Connected: {0}", info.ConnectionDesc);
-        });
+        // m_Server->SetClientConnectedCallback([&](const ClientInfo &info) {
+        //     ATLOG_INFO("Client Connected: {0}", info.ConnectionDesc);
+        // });
         m_Server->SetClientDisconnectedCallback([&](const ClientInfo &info) {
             ATLOG_INFO("Client Disconnected: {0}", info.ConnectionDesc);
         });

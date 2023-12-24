@@ -173,6 +173,12 @@ namespace Atom {
                 client.ID = (ClientID)status->m_hConn;
                 client.ConnectionDesc = connectionInfo.m_szConnectionDescription;
 
+                char ipStr[SteamNetworkingIPAddr::k_cchMaxString];
+                connectionInfo.m_addrRemote.ToString(ipStr, sizeof(ipStr), false);
+                client.IP = ipStr; // Set the IP address in the client structure
+
+
+
                 // User callback
                 m_ClientConnectedCallback(client);
 

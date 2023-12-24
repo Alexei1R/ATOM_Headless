@@ -19,6 +19,7 @@ namespace Atom {
     {
         ClientID ID;
         std::string ConnectionDesc;
+        std::string IP;
     };
 
     class Server
