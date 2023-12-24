@@ -40,6 +40,7 @@ namespace Atom {
 
         cv::Mat frame;
         cv::VideoCapture cap;
+        cv::VideoWriter m_VideoWriter;
 
         std::vector<cv::VideoWriter> m_VideoWriters;
 

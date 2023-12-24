@@ -19,22 +19,12 @@ namespace Atom {
         PushLayer(m_SerialCommunication);
 
         m_ServerLayer = new ServerLayer(27020);
-        m_ServerLayer->OnClientConnectedCallback([&](const ClientInfo &info) {
-            ATLOG_INFO("Client Connected: {0}", info.ConnectionDesc);
-            ATLOG_WARN("IP Address: {0}", info.IP);
-
-            cv::VideoWriter m_VideoWriter;
-            m_VideoWriter.open("appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=" + info.IP + " port=5000", 0, cap.get(cv::CAP_PROP_FPS), cv::Size(cap.get(cv::CAP_PROP_FRAME_WIDTH), cap.get(cv::CAP_PROP_FRAME_HEIGHT)), true);
-            m_VideoWriters.push_back(m_VideoWriter);
-
-        });
         PushLayer(m_ServerLayer);
 
-
+        m_ServerLayer->OnClientConnectedCallback([](const ClientInfo& client_info) {  });
 
         m_ServerLayer->RegisterMessageCallbackWithId(1, [](void * data , unsigned int size) {
             ATLOG_INFO("Message 1 received");
-
 
             //cast data to the type you want
 
@@ -46,8 +36,7 @@ namespace Atom {
 
 
 
-        // cap.open(pipeline, cv::CAP_GSTREAMER);
-        cap.open(0);
+        cap.open(pipeline, cv::CAP_GSTREAMER);
 
         if (!cap.isOpened()) {
             ATLOG_WARN("Error opening the camera");
@@ -56,7 +45,7 @@ namespace Atom {
 
 
 
-        // m_VideoWriter.open("appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=127.0.0.1 port=5000", 0, cap.get(cv::CAP_PROP_FPS), cv::Size(cap.get(cv::CAP_PROP_FRAME_WIDTH), cap.get(cv::CAP_PROP_FRAME_HEIGHT)), true);
+        m_VideoWriter.open("appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=192.168.100.119 port=5000", 0, cap.get(cv::CAP_PROP_FPS), cv::Size(cap.get(cv::CAP_PROP_FRAME_WIDTH), cap.get(cv::CAP_PROP_FRAME_HEIGHT)), true);
 
 
 
@@ -101,9 +90,8 @@ namespace Atom {
             }
 
 
-            for(auto videoWriter : m_VideoWriters) {
-                videoWriter.write(frame);
-            }
+
+            m_VideoWriter.write(frame);
 
         }
     }
