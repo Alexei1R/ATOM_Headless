@@ -7,9 +7,9 @@
 #include "ATOM/atompch.h"
 #include "ATOM/Core/Logging/Logging.h"
 #include "ATOM/EmbededPlatform/SerialCommunication.h"
-#include "ATOM/Server/Server.h"
 #include <opencv2/opencv.hpp>
 
+#include "Networking/Server.h"
 
 
 namespace Atom {
@@ -36,13 +36,15 @@ namespace Atom {
 
 
         SerialCommunicationLayer* m_SerialCommunication;
-        ServerLayer* m_ServerLayer;
 
         cv::Mat frame;
         cv::VideoCapture cap;
         cv::VideoWriter m_VideoWriter;
-
         std::vector<cv::VideoWriter> m_VideoWriters;
+
+
+        Atom::Server* m_Server;
+
 
     };
 }

@@ -23,10 +23,7 @@ set(SOURCES
         ATOM/Core/Layers/Layer.h
         ATOM/Core/Layers/LayerStack.cpp
         ATOM/Core/Layers/LayerStack.h
-
-
-
-
+        ATOM/Application.cpp
 
 
 )
@@ -37,9 +34,6 @@ set(serial_SRCS
         Communication/Serial/impl/v8stdint.h
         ATOM/EmbededPlatform/SerialCommunication.cpp
         ATOM/EmbededPlatform/SerialCommunication.h
-        ATOM/Server/Server.cpp
-        ATOM/Server/Server.h
-
 )
 if(APPLE)
  # If OSX
