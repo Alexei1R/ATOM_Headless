@@ -34,6 +34,10 @@ set(serial_SRCS
         Communication/Serial/impl/v8stdint.h
         ATOM/EmbededPlatform/SerialCommunication.cpp
         ATOM/EmbededPlatform/SerialCommunication.h
+        ATOM/Core/VideoServer/Frame.cpp
+        ATOM/Core/VideoServer/Frame.h
+        ATOM/Core/ServerLayer.cpp
+        ATOM/Core/ServerLayer.h
 )
 if(APPLE)
  # If OSX

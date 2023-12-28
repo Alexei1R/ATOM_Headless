@@ -22,7 +22,7 @@
 #include <map>
 #include <thread>
 #include <functional>
-
+#include "glm/glm.hpp"
 #include "ATOM/Core/Logging/Logging.h"
 #include "ATOM/Core/Layers/Layer.h"
 #include "ATOM/Core/Layers/LayerStack.h"

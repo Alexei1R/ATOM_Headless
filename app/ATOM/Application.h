@@ -10,9 +10,14 @@
 #include <opencv2/opencv.hpp>
 
 #include "Networking/Server.h"
+#include "ATOM/Core/VideoServer/Frame.h"
+#include "ATOM/Core/ServerLayer.h"
 
 
 namespace Atom {
+
+
+
     class Application {
     public:
         Application();
@@ -37,13 +42,9 @@ namespace Atom {
 
         SerialCommunicationLayer* m_SerialCommunication;
 
-        cv::Mat frame;
-        cv::VideoCapture cap;
-        cv::VideoWriter m_VideoWriter;
-        std::vector<cv::VideoWriter> m_VideoWriters;
 
-
-        Atom::Server* m_Server;
+        Atom::ServerLayer* m_ServerLayer;
+        Frame* m_Frame;
 
 
     };

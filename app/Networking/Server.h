@@ -68,6 +68,13 @@ namespace Atom {
                     m_Interface->SendMessageToConnection((HSteamNetConnection)clientID, &data, size, reliable ? k_nSteamNetworkingSend_Reliable : k_nSteamNetworkingSend_Unreliable, nullptr);
             }
         }
+        //send message void* pointer
+        void SendDataPointerToClient(const void* data, size_t dataSize, bool reliable = true) {
+            for (const auto& [clientID, clientInfo] : m_ConnectedClients) {
+                m_Interface->SendMessageToConnection((HSteamNetConnection)clientID, data, dataSize, reliable ? k_nSteamNetworkingSend_Reliable : k_nSteamNetworkingSend_Unreliable, nullptr);
+            }
+        }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         void KickClient(ClientID clientID);
