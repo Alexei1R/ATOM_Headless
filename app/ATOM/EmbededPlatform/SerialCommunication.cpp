@@ -51,6 +51,7 @@ namespace Atom {
     }
 
     SerialCommunicationLayer::~SerialCommunicationLayer() {
+
         if (m_Serial != nullptr) {
             m_Serial->close();
             delete m_Serial;
@@ -65,31 +66,7 @@ namespace Atom {
         if (m_Serial != nullptr && m_Serial->isOpen()) {
             if (m_Serial->available()) {
                 std::string data = m_Serial->read();
-                m_AccumulatedData += data;
-
-                size_t start = 0;
-                size_t newStart = 0;
-                while ((start = m_AccumulatedData.find('@', start)) != std::string::npos) {
-                    size_t end = m_AccumulatedData.find(";;", start);
-                    if (end != std::string::npos) {
-                        std::string token = m_AccumulatedData.substr(start, end - start);
-                        size_t colonPos = token.find(':');
-                        if (colonPos != std::string::npos && colonPos + 1 < token.length()) {
-                            std::string id = token.substr(1, colonPos - 1);
-                            std::string value = token.substr(colonPos + 1);
-                            ATLOG_INFO("ID: {}, Value: {}", id, value);
-                        }
-                        newStart = end + 2;
-                        start = newStart;
-                    } else {
-                        break;
-                    }
-                }
-
-                if (newStart > 0) {
-                    m_AccumulatedData = m_AccumulatedData.substr(newStart);
-                }
-
+                ATLOG_WARN("Data Received: {}", data);
                 m_Serial->flush();
             }
         }
@@ -100,7 +77,8 @@ namespace Atom {
 
     void SerialCommunicationLayer::SendData(std::string data) {
         if (m_Serial != nullptr && m_Serial->isOpen()) {
-            m_Serial->write(data);
+            m_Serial->write(data + "\r\n");
+            ATLOG_WARN("Data Sent: {}", data);
         }
     }
 }

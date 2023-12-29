@@ -9,15 +9,18 @@ namespace Atom {
     Application* Application::s_Instance = nullptr;
 
     Application::Application() {
+        signal(SIGINT, Application::SignalHandler);
+        signal(SIGTERM, Application::SignalHandler);
+
         s_Instance = (Application *) this;
 
-        m_Interval = std::chrono::milliseconds(250);
+        m_Interval = std::chrono::milliseconds(1000);
 
-        m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyUSB0", 9600);
+        m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyACM0", 19200);
         PushLayer(m_SerialCommunication);
 
 
-        m_Frame = new Frame("/home/toor/Downloads/test.mp4");
+        m_Frame = new Frame("/home/toor/Downloads/pc.mp4");
         PushLayer(m_Frame);
 
         m_ServerLayer = new ServerLayer(27020);
@@ -28,24 +31,37 @@ namespace Atom {
             m_Frame->PushNewVideoWriterWithIP(ip);
         });
 
+
+
+        // //id 1 , speed
         m_ServerLayer->RegisterMessageWithID(1, [&](Message message) {
-            ATLOG_INFO("Message Received ID = 1: {0}", std::string((char*)message.payload));
+            float speed = *(float*)message.payload;
+            ATLOG_INFO("Message Received: ID = 1 {0}", speed);
+            if (speed >= -50.0 && speed <= 50.0) {
+                std::stringstream commandStream;
+                commandStream << std::fixed << std::setprecision(2) << "#1:" << speed << ";;";
+                std::string command = commandStream.str();
+                m_SerialCommunication->SendData(command);
+            } else {
+                ATLOG_ERROR("Invalid speed value: {0}", speed);
+            }
         });
-
-        //id 2 , type int
+        //id 2 , angle
         m_ServerLayer->RegisterMessageWithID(2, [&](Message message) {
-            ATLOG_INFO("Message Received: ID = 2 {0}", *(int*)message.payload);
-
+            float angle = *(float*)message.payload;
+            ATLOG_INFO("Message Received: ID = 2 {0}", angle);
+            if (angle >= -50.0 && angle <= 50.0) {
+                std::stringstream commandStream;
+                commandStream << std::fixed << std::setprecision(2) << "#2:" << angle << ";;";
+                std::string command = commandStream.str();
+                m_SerialCommunication->SendData(command);
+            } else {
+                ATLOG_ERROR("Invalid angle value: {0}", angle);
+            }
         });
 
-        //id 3 , glm::vec3
-        m_ServerLayer->RegisterMessageWithID(3, [&](Message message) {
-            // ATLOG_INFO("Message Received: ID = 3 {0}", *(glm::vec3*)message.payload);
-                //print all 3 values of glm::vec3
-            ATLOG_INFO("Message Received: ID = 3 {0}", ((glm::vec3*)message.payload)->x);
-            ATLOG_INFO("Message Received: ID = 3 {0}", ((glm::vec3*)message.payload)->y);
-            ATLOG_INFO("Message Received: ID = 3 {0}", ((glm::vec3*)message.payload)->z);
-        });
+
+
 
 
 
@@ -60,6 +76,14 @@ namespace Atom {
         if (m_ServerLayer) {
             delete m_ServerLayer;
         }
+        if (m_Frame) {
+            delete m_Frame;
+        }
+
+        if (m_SerialCommunication) {
+            delete m_SerialCommunication;
+        }
+
 
 
     }
@@ -67,6 +91,8 @@ namespace Atom {
 
     void Application::Run() {
         while (m_IsRuning) {
+
+
             for (Layer* layer: m_LayerStack) {
                 layer->OnUpdate();
             }
@@ -85,6 +111,9 @@ namespace Atom {
 
 
     void Application::WindowClose() {
+        m_SerialCommunication->SendData("#1:0.0;;");
+        m_SerialCommunication->SendData("#2:0.0;;");
+        ATLOG_WARN("Motor Stopped");
         m_IsRuning = false;
     }
 
@@ -95,5 +124,13 @@ namespace Atom {
 
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
+    }
+
+    void Application::SignalHandler(int signal) {
+        // Handle different types of signals, e.g., SIGINT, SIGTERM
+        if (signal == SIGINT || signal == SIGTERM) {
+            std::cout << "Signal (" << signal << ") received. Shutting down." << std::endl;
+            Application::GetApp().WindowClose(); // Set the running flag to false
+        }
     }
 }

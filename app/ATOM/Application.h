@@ -30,7 +30,11 @@ namespace Atom {
         static Application* s_Instance;
         inline static Application& GetApp() { return *s_Instance; }
         void WindowClose();
+
     private:
+        static void SignalHandler(int signal);
+    private:
+
         LayerStack m_LayerStack;
         bool m_IsRuning = true;
 
