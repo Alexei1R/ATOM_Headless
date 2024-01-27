@@ -49,6 +49,7 @@ namespace Atom {
 
         Atom::ServerLayer* m_ServerLayer;
         Frame* m_Frame;
+        bool m_IsCameraOpen = false;
 
 
     };

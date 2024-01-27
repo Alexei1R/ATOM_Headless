@@ -19,12 +19,14 @@ namespace Atom {
         m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyACM0", 19200);
         PushLayer(m_SerialCommunication);
 
-
-        m_Frame = new Frame("/home/toor/Downloads/pc.mp4");
-        PushLayer(m_Frame);
-
         m_ServerLayer = new ServerLayer(27020);
         PushLayer(m_ServerLayer);
+
+        m_Frame = new Frame();
+        PushLayer(m_Frame);
+
+
+
 
         m_ServerLayer->SetServerConnectedCallback([&](std::string ip) {
             ATLOG_INFO("Connected to client: {0}", ip);
@@ -58,6 +60,22 @@ namespace Atom {
             } else {
                 ATLOG_ERROR("Invalid angle value: {0}", angle);
             }
+        });
+
+        //id 50 , string camera pipeline
+        m_ServerLayer->RegisterMessageWithID(50, [&](Message message) {
+            std::string pipeline = (char*)message.payload;
+            ATLOG_INFO("Message Received: ID = 50 {0}", pipeline);
+            if(!m_IsCameraOpen){
+                m_Frame->OpenCamera(pipeline);
+                m_IsCameraOpen = true;
+            }
+            Message response;
+            response.id = 50;
+            response.payloadSize = 2;
+            response.payload = (void*)"OK";
+            m_ServerLayer->SendMessage(response);
+
         });
 
 

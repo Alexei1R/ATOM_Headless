@@ -12,8 +12,10 @@
 namespace Atom {
     class Frame : public Layer {
     public:
-        Frame(std::string source,int apiPreference = cv::CAP_ANY);
+        Frame();
         ~Frame();
+
+        void OpenCamera(std::string source,int apiPreference = cv::CAP_ANY);
 
         virtual void OnAttach() override;
         virtual void OnDetach() override;
@@ -30,7 +32,8 @@ namespace Atom {
         std::thread m_VideoThread;
         std::mutex frameCloneMutex;
 
-
+        int m_FrameWidth = 640;
+        int m_FrameHeight = 480;
         cv::Mat frame;
         cv::VideoCapture cap;
         std::vector<cv::VideoWriter> m_VideoWriters;
