@@ -30,7 +30,53 @@ namespace Atom {
 
         m_ServerLayer->SetServerConnectedCallback([&](std::string ip) {
             ATLOG_INFO("Connected to client: {0}", ip);
-            m_Frame->PushNewVideoWriterWithIP(ip);
+            for (CameraUsers& cameraUser: m_CameraUsers) {
+                if (cameraUser.ip == ip) {
+                    return;
+                }
+            }
+            CameraUsers cameraUser;
+            cameraUser.ip = ip;
+            cameraUser.IsCreatedVideoWriter = false;
+            m_CameraUsers.push_back(cameraUser);
+        });
+        m_ServerLayer->SetServerDisconnectedCallback([&](std::string ip) {
+            ATLOG_INFO("Disconnected from client: {0}", ip);
+            for (int i = 0; i < m_CameraUsers.size(); i++) {
+                if (m_CameraUsers[i].ip == ip) {
+                    m_Frame->RemoveVideoWriterWithIP(ip);
+                    m_CameraUsers.erase(m_CameraUsers.begin() + i);
+                    return;
+                }
+            }
+        });
+
+
+        //id 50 , string camera pipeline
+        m_ServerLayer->RegisterMessageWithID(50, [&](Message message) {
+            std::string pipeline = (char*)message.payload;
+            ATLOG_INFO("Message Received: ID = 50 {0}", pipeline);
+            if(!m_IsCameraOpen) {
+                m_Frame->OpenCamera(pipeline);
+                m_IsCameraOpen = true;
+            }
+
+
+            // for last user that isCameraOpen if false open the camera with ip and pipeline
+            for (CameraUsers& cameraUser: m_CameraUsers) {
+                if (!cameraUser.IsCreatedVideoWriter) {
+                    m_Frame->PushNewVideoWriterWithIP(cameraUser.ip);
+                    cameraUser.IsCreatedVideoWriter = true;
+
+                    // send aknowledgement
+                     Message response;
+                     response.id = 50;
+                     response.payloadSize = 2;
+                     response.payload = (void*)"OK";
+                     m_ServerLayer->SendMessage(response);
+                }
+            }
+
         });
 
 
@@ -62,21 +108,6 @@ namespace Atom {
             }
         });
 
-        //id 50 , string camera pipeline
-        m_ServerLayer->RegisterMessageWithID(50, [&](Message message) {
-            std::string pipeline = (char*)message.payload;
-            ATLOG_INFO("Message Received: ID = 50 {0}", pipeline);
-            if(!m_IsCameraOpen){
-                m_Frame->OpenCamera(pipeline);
-                m_IsCameraOpen = true;
-            }
-            Message response;
-            response.id = 50;
-            response.payloadSize = 2;
-            response.payload = (void*)"OK";
-            m_ServerLayer->SendMessage(response);
-
-        });
 
 
 

@@ -15,6 +15,10 @@
 
 
 namespace Atom {
+    typedef struct CameraUsers {
+        std::string ip;
+        bool IsCreatedVideoWriter = false;
+    } CameraUsers;
 
 
 
@@ -46,10 +50,12 @@ namespace Atom {
 
         SerialCommunicationLayer* m_SerialCommunication;
 
+        std::vector<CameraUsers> m_CameraUsers;
+        bool m_IsCameraOpen = false;
+
 
         Atom::ServerLayer* m_ServerLayer;
         Frame* m_Frame;
-        bool m_IsCameraOpen = false;
 
 
     };

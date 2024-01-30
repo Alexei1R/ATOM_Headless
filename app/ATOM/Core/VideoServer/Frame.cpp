@@ -25,15 +25,25 @@ namespace Atom {
                     cv::Size(m_FrameWidth,m_FrameHeight), true));
     }
 
+    void Frame::RemoveVideoWriterWithIP(std::string ip) {
+        //remove from verctor video writer with ip
+        for (int i = 0; i < m_VideoWriters.size(); i++) {
+            if (m_VideoWriters[i].getBackendName() == ip) {
+                m_VideoWriters.erase(m_VideoWriters.begin() + i);
+                return;
+            }
+        }
+    }
+
     void Frame::OnAttach() {}
 
     void Frame::OnDetach() {}
 
     void Frame::OnUpdate() {
-        if (!frame.empty()) {
-            cv::imshow("Frame", frame);
-            cv::waitKey(1);
-        }
+        // if (!frame.empty()) {
+        //     cv::imshow("Frame", frame);
+        //     cv::waitKey(1);
+        // }
     }
 
     void Frame::OnFixedUpdate() {}
@@ -60,7 +70,7 @@ namespace Atom {
     }
 
     void Frame::OpenCamera(std::string source, int apiPreference) {
-        std::string pipeline = "v4l2src device=/dev/video0 ! video/x-raw,format=YUY2,width=640,height=480,framerate=30/1 ! videoconvert ! appsink";
+        // std::string pipeline = "v4l2src device=/dev/video0 ! video/x-raw,format=YUY2,width=640,height=480,framerate=30/1 ! videoconvert ! appsink";
         // cap.open(pipeline, cv::CAP_GSTREAMER);
         cap.open(source, apiPreference);
         if (!cap.isOpened()) {

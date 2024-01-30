@@ -17,6 +17,9 @@ Atom::ServerLayer::ServerLayer(int port) {
     });
     m_Server->SetClientDisconnectedCallback([&](const ClientInfo& info) {
         ATLOG_INFO("Client Disconnected: {0}", info.ConnectionDesc);
+        if(m_ServerDisconnectedCallback){
+            m_ServerDisconnectedCallback(info.IP);
+        }
 
     });
 
@@ -80,6 +83,9 @@ void Atom::ServerLayer::SendMessage(const Message& message) {
 
     // Free the allocated buffer after sending
     delete[] buffer;
+}
+
+void Atom::ServerLayer::SendMessageToClient(const Message &message, std::string ip) {
 }
 
 

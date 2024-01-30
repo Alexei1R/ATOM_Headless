@@ -23,6 +23,7 @@ namespace Atom {
         virtual void OnFixedUpdate() override;
 
         void PushNewVideoWriterWithIP(std::string ip);
+        void RemoveVideoWriterWithIP(std::string ip);
     private:
         void VideoProcessingThread();
 

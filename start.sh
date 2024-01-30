@@ -2,23 +2,29 @@
 
 repo_owner="Alexei1R"
 repo_name="ATOM_Headless"
-auth_token="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"
+auth_token="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"
 last_commit_file="last_commit.txt"
 
 get_last_commit() {
     local response
     response=$(curl -s -H "Authorization: Token $auth_token" "https://api.github.com/repos/$repo_owner/$repo_name/commits")
 
-    # Check if the response is an array
-    if jq -e '. | type == "array"' <<< "$response" >/dev/null; then
-        # Extract SHA from the first element of the array
-        echo "$response" | jq -r '.[0].sha'
-    elif jq -e '. | type == "object"' <<< "$response" >/dev/null; then
-        # Extract SHA directly if the response is an object
-        echo "$response" | jq -r '.sha'
+    if [ $? -eq 0 ]; then
+        # Print the response for debugging
+        # echo "GitHub API Response: $response"
+
+        # Check if the response is a JSON array
+        if jq -e '.[].sha' <<< "$response" >/dev/null; then
+            # Extract SHA of the latest commit from the array
+            echo "$response" | jq -r '.[0].sha'
+        else
+            # Handle other cases or errors
+            echo "Error: Invalid GitHub API response."
+            exit 1
+        fi
     else
-        # Handle other cases or errors
-        echo "Error: Unable to parse GitHub API response."
+        # Handle curl errors
+        echo "Error: Unable to fetch GitHub API response."
         exit 1
     fi
 }
@@ -62,4 +68,3 @@ else
     echo "No new commits."
     build_and_run
 fi
-
