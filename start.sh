@@ -43,6 +43,7 @@ write_last_commit_to_file() {
 pull_latest_commit() {
     git pull
     echo "Successfully pulled the latest changes."
+    notify-send "ATOM" "Successfully pulled the latest changes."
 }
 
 build_and_run() {
@@ -61,10 +62,15 @@ last_saved_commit=$(read_last_commit_from_file "$last_commit_file")
 
 if [ -n "$last_fetched_commit" ] && [ "$last_saved_commit" != "$last_fetched_commit" ]; then
     echo "New commit found: $last_fetched_commit"
+    notify-send "ATOM" "New commit found: $last_fetched_commit"
+
     pull_latest_commit
     write_last_commit_to_file "$last_commit_file" "$last_fetched_commit"
+    
+    notify-send "ATOM" "Begin build."
     build_and_run
 else
     echo "No new commits."
+    notify-send "ATOM" "Begin build."
     build_and_run
 fi

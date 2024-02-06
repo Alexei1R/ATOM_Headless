@@ -67,7 +67,6 @@ namespace Atom {
                 if (!cameraUser.IsCreatedVideoWriter) {
                     m_Frame->PushNewVideoWriterWithIP(cameraUser.ip);
                     cameraUser.IsCreatedVideoWriter = true;
-
                     // send aknowledgement
                      Message response;
                      response.id = 50;
