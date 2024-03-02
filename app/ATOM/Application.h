@@ -12,6 +12,7 @@
 #include "Networking/Server.h"
 #include "ATOM/Core/VideoServer/Frame.h"
 #include "ATOM/Core/ServerLayer.h"
+#include "ATOM/Lidar/LidarLayer.h"
 
 
 namespace Atom {
@@ -49,6 +50,7 @@ namespace Atom {
 
 
         SerialCommunicationLayer* m_SerialCommunication;
+        LidarReadLayer* m_LidarLayer;
 
         std::vector<CameraUsers> m_CameraUsers;
         bool m_IsCameraOpen = false;

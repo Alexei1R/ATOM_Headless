@@ -2,6 +2,8 @@ project(ATOM)
 
 
 find_package(OpenCV REQUIRED )
+find_package(Threads REQUIRED)
+
 
 
 
@@ -40,6 +42,8 @@ set(serial_SRCS
         ATOM/Core/ServerLayer.h
         ATOM/Core/VideoServer/VideoServer.cpp
         ATOM/Core/VideoServer/VideoServer.h
+        ATOM/Lidar/LidarLayer.cpp
+        ATOM/Lidar/LidarLayer.h
 )
 if(APPLE)
  # If OSX
@@ -68,13 +72,21 @@ else()
          Communication/Serial/impl/list_ports/lists_ports_win.cpp)
 endif()
 
-add_executable(executable_headless ${SOURCES} ${serial_SRCS})
+file(GLOB LIDAR_SOURCES
+        "Communication/oradar/*.cpp"
+        "Communication/oradar/*.h"
+)
+
+
+
+add_executable(executable_headless ${SOURCES} ${serial_SRCS} ${LIDAR_SOURCES})
 
 target_link_libraries(executable_headless
         glm
         spdlog
         GameNetworkingSockets
         ${OpenCV_LIBS}
+        Threads::Threads
 )
 
 

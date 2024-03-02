@@ -14,9 +14,9 @@ namespace Atom {
 
         s_Instance = (Application *) this;
 
-        m_Interval = std::chrono::milliseconds(1000);
+        m_Interval = std::chrono::milliseconds(33);
 
-        m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyACM0", 19200);
+        m_SerialCommunication = new SerialCommunicationLayer("/dev/ttyUSB0", 19200);
         PushLayer(m_SerialCommunication);
 
         m_ServerLayer = new ServerLayer(27020);
@@ -25,6 +25,19 @@ namespace Atom {
         m_Frame = new Frame();
         PushLayer(m_Frame);
 
+
+        std::string port = "/dev/ttyACM0";
+        int result = chmod(port.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if (result != 0) {
+            perror("chmod failed");
+            ATLOG_CRITICAL("Failed to change permissions on [{}]", port);
+        } else {
+            ATLOG_WARN("Changed permissions on [{}]", port);
+        }
+        m_LidarLayer = new LidarReadLayer(port);
+        PushLayer(m_LidarLayer);
+
+//        m_LidarLayer->openLidar("/dev/ttyACM0");
 
 
 
@@ -116,6 +129,8 @@ namespace Atom {
 
 
 
+
+
     }
 
 
@@ -147,12 +162,29 @@ namespace Atom {
             std::chrono::time_point<std::chrono::high_resolution_clock> m_CurrentTime = std::chrono::high_resolution_clock::now();
             std::chrono::duration<float, std::milli> m_TimeSpan = m_CurrentTime - m_LastTime;
 
+
+
             if (m_TimeSpan.count() >= m_Interval.count()) {
                 for (Layer* layer: m_LayerStack) {
                     layer->OnFixedUpdate();
+
+                    //send data from lidar to client
+                    if (layer == m_LidarLayer) {
+                        if (m_LidarLayer->IsOnline()) {
+                            std::vector<std::pair<float, float>> coordinatesList = m_LidarLayer->GetCoordinatesList();
+                            if (coordinatesList.size() > 0) {
+                                Message message;
+                                message.id = 75;
+                                message.payloadSize = coordinatesList.size() * sizeof(std::pair<float, float>);
+                                message.payload = (void*)coordinatesList.data();
+                                m_ServerLayer->SendMessage(message);
+                            }
+                        }
+                    }
                 }
                 m_LastTime = m_CurrentTime;
             }
+
 
         }
     }
