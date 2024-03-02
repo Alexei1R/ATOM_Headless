@@ -120,7 +120,7 @@ namespace Atom {
                 for (int i = 0; i < m_ScanData.vailtidy_point_num; i++) {
                     double range = m_ScanData.data[i].distance;
                     double angle = m_ScanData.data[i].angle *  M_PI / 180.0;
-                    angle += M_PI / 2.0;
+                    angle += M_PI;// / 2.0;
 
                     // Ensure the angle is within [0, 2*pi)
                     angle = fmod(angle, 2.0 * M_PI);
