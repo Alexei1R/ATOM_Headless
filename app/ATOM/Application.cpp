@@ -122,9 +122,30 @@ namespace Atom {
         m_ServerLayer->RegisterMessageWithID(60, [&](Message message) {
             GPIO_PIN = *(int *) message.payload;
             ATLOG_INFO("Message Received: ID = 60");
-            GPIO::setmode(GPIO::BOARD);
-            GPIO::setup(GPIO_PIN, GPIO::IN);
-            GPIO::add_event_detect(GPIO_PIN, GPIO::RISING, GPIO_Callback);
+            gpioState = gpioInitialise();
+            if (gpioState < 0) {
+                ATLOG_ERROR("Failed to initialize GPIO");
+            } else {
+                ATLOG_INFO("GPIO Initialized");
+            }
+
+
+            //set pin as input
+            gpioState = gpioSetMode(GPIO_PIN, JET_INPUT);
+            if (gpioState < 0) {
+                ATLOG_ERROR("Failed to set GPIO pin as input");
+            } else {
+                ATLOG_INFO("GPIO pin set as input");
+            }
+            int stat = gpioSetISRFunc(GPIO_PIN, EITHER_EDGE, 1000, &timestamp, &GPIO_Callback);
+            if (stat < 0) {
+                ATLOG_ERROR("Failed to set GPIO ISR function");
+            } else {
+                ATLOG_INFO("GPIO ISR function set");
+            }
+
+
+
         });
 
 
@@ -145,7 +166,8 @@ namespace Atom {
         }
 
 
-        GPIO::cleanup();
+        gpioTerminate();
+
 
 
     }

@@ -7,6 +7,3 @@
 [submodule "libs/GameNetworkingSockets"]
 	path = libs/GameNetworkingSockets
 	url = https://github.com/Alexei1R/GameNetworkingSockets.git
-[submodule "libs/JetsonGPIO"]
-	path = libs/JetsonGPIO
-	url = https://github.com/pjueon/JetsonGPIO.git

@@ -26,6 +26,9 @@ set(SOURCES
         ATOM/Core/Layers/LayerStack.cpp
         ATOM/Core/Layers/LayerStack.h
         ATOM/Application.cpp
+        ATOM/GPIO/orin.c
+        ATOM/GPIO/jetgpio.h
+
 
 
 )
@@ -44,6 +47,8 @@ set(serial_SRCS
         ATOM/Core/VideoServer/VideoServer.h
         ATOM/Lidar/LidarLayer.cpp
         ATOM/Lidar/LidarLayer.h
+
+
 )
 if(APPLE)
  # If OSX
@@ -87,7 +92,6 @@ target_link_libraries(executable_headless
         GameNetworkingSockets
         ${OpenCV_LIBS}
         Threads::Threads
-        JetsonGPIO::JetsonGPIO
 )
 
 

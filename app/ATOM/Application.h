@@ -13,7 +13,7 @@
 #include "ATOM/Core/VideoServer/Frame.h"
 #include "ATOM/Core/ServerLayer.h"
 #include "ATOM/Lidar/LidarLayer.h"
-#include "JetsonGPIO.h"
+#include "ATOM/GPIO/jetgpio.h"
 
 
 namespace Atom {
@@ -62,6 +62,10 @@ namespace Atom {
 
 
         int GPIO_PIN = 8;
+        int gpioState = 0;
+        static volatile int interrupt = 1;
+        unsigned long timestamp;
+
 
 
     };
