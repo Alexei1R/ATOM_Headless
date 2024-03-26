@@ -13,6 +13,7 @@
 #include "ATOM/Core/VideoServer/Frame.h"
 #include "ATOM/Core/ServerLayer.h"
 #include "ATOM/Lidar/LidarLayer.h"
+#include "JetsonGPIO.h"
 
 
 namespace Atom {
@@ -58,6 +59,9 @@ namespace Atom {
 
         Atom::ServerLayer* m_ServerLayer;
         Frame* m_Frame;
+
+
+        int GPIO_PIN = 8;
 
 
     };

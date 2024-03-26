@@ -4,9 +4,11 @@
 #include "Application.h"
 
 
-
 namespace Atom {
-    Application* Application::s_Instance = nullptr;
+    void GPIO_Callback();
+
+
+    Application *Application::s_Instance = nullptr;
 
     Application::Application() {
         signal(SIGINT, Application::SignalHandler);
@@ -36,14 +38,9 @@ namespace Atom {
         }
         m_LidarLayer = new LidarReadLayer(port);
         PushLayer(m_LidarLayer);
-
-//        m_LidarLayer->openLidar("/dev/ttyACM0");
-
-
-
         m_ServerLayer->SetServerConnectedCallback([&](std::string ip) {
             ATLOG_INFO("Connected to client: {0}", ip);
-            for (CameraUsers& cameraUser: m_CameraUsers) {
+            for (CameraUsers &cameraUser: m_CameraUsers) {
                 if (cameraUser.ip == ip) {
                     return;
                 }
@@ -67,25 +64,25 @@ namespace Atom {
 
         //id 50 , string camera pipeline
         m_ServerLayer->RegisterMessageWithID(50, [&](Message message) {
-            std::string pipeline = (char*)message.payload;
+            std::string pipeline = (char *) message.payload;
             ATLOG_INFO("Message Received: ID = 50 {0}", pipeline);
-            if(!m_IsCameraOpen) {
+            if (!m_IsCameraOpen) {
                 m_Frame->OpenCamera(pipeline);
                 m_IsCameraOpen = true;
             }
 
 
             // for last user that isCameraOpen if false open the camera with ip and pipeline
-            for (CameraUsers& cameraUser: m_CameraUsers) {
+            for (CameraUsers &cameraUser: m_CameraUsers) {
                 if (!cameraUser.IsCreatedVideoWriter) {
                     m_Frame->PushNewVideoWriterWithIP(cameraUser.ip);
                     cameraUser.IsCreatedVideoWriter = true;
                     // send aknowledgement
-                     Message response;
-                     response.id = 50;
-                     response.payloadSize = 2;
-                     response.payload = (void*)"OK";
-                     m_ServerLayer->SendMessage(response);
+                    Message response;
+                    response.id = 50;
+                    response.payloadSize = 2;
+                    response.payload = (void *) "OK";
+                    m_ServerLayer->SendMessage(response);
                 }
             }
 
@@ -95,7 +92,7 @@ namespace Atom {
 
         // //id 1 , speed
         m_ServerLayer->RegisterMessageWithID(1, [&](Message message) {
-            float speed = *(float*)message.payload;
+            float speed = *(float *) message.payload;
             ATLOG_INFO("Message Received: ID = 1 {0}", speed);
             if (speed >= -50.0 && speed <= 50.0) {
                 std::stringstream commandStream;
@@ -108,7 +105,7 @@ namespace Atom {
         });
         //id 2 , angle
         m_ServerLayer->RegisterMessageWithID(2, [&](Message message) {
-            float angle = *(float*)message.payload;
+            float angle = *(float *) message.payload;
             ATLOG_INFO("Message Received: ID = 2 {0}", angle);
             if (angle >= -50.0 && angle <= 50.0) {
                 std::stringstream commandStream;
@@ -121,14 +118,14 @@ namespace Atom {
         });
 
 
-
-
-
-
-
-
-
-
+        //60 , begin read gpio pin 8
+        m_ServerLayer->RegisterMessageWithID(60, [&](Message message) {
+            GPIO_PIN = *(int *) message.payload;
+            ATLOG_INFO("Message Received: ID = 60");
+            GPIO::setmode(GPIO::BOARD);
+            GPIO::setup(GPIO_PIN, GPIO::IN);
+            GPIO::add_event_detect(GPIO_PIN, GPIO::RISING, GPIO_Callback);
+        });
 
 
     }
@@ -148,6 +145,8 @@ namespace Atom {
         }
 
 
+        GPIO::cleanup();
+
 
     }
 
@@ -156,16 +155,15 @@ namespace Atom {
         while (m_IsRuning) {
 
 
-            for (Layer* layer: m_LayerStack) {
+            for (Layer *layer: m_LayerStack) {
                 layer->OnUpdate();
             }
             std::chrono::time_point<std::chrono::high_resolution_clock> m_CurrentTime = std::chrono::high_resolution_clock::now();
             std::chrono::duration<float, std::milli> m_TimeSpan = m_CurrentTime - m_LastTime;
 
 
-
             if (m_TimeSpan.count() >= m_Interval.count()) {
-                for (Layer* layer: m_LayerStack) {
+                for (Layer *layer: m_LayerStack) {
                     layer->OnFixedUpdate();
 
                     //send data from lidar to client
@@ -176,7 +174,7 @@ namespace Atom {
                                 Message message;
                                 message.id = 75;
                                 message.payloadSize = coordinatesList.size() * sizeof(std::pair<float, float>);
-                                message.payload = (void*)coordinatesList.data();
+                                message.payload = (void *) coordinatesList.data();
                                 m_ServerLayer->SendMessage(message);
                             }
                         }
@@ -198,11 +196,11 @@ namespace Atom {
     }
 
 
-    void Application::PushLayer(Layer* layer) {
+    void Application::PushLayer(Layer *layer) {
         m_LayerStack.PushLayer(layer);
     }
 
-    void Application::PushOverlay(Layer* layer) {
+    void Application::PushOverlay(Layer *layer) {
         m_LayerStack.PushOverlay(layer);
     }
 
@@ -213,4 +211,13 @@ namespace Atom {
             Application::GetApp().WindowClose(); // Set the running flag to false
         }
     }
+
+
+    // GPIO Callback
+    void GPIO_Callback() {
+        ATLOG_INFO("GPIO Callback");
+
+    }
+
+
 }

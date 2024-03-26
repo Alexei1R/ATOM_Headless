@@ -6,6 +6,7 @@
     <mapping directory="$PROJECT_DIR$/libs/GameNetworkingSockets/src/external/abseil" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/GameNetworkingSockets/src/external/picojson" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/GameNetworkingSockets/src/external/webrtc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/JetsonGPIO" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/glm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/spdlog" vcs="Git" />
   </component>

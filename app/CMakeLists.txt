@@ -87,6 +87,7 @@ target_link_libraries(executable_headless
         GameNetworkingSockets
         ${OpenCV_LIBS}
         Threads::Threads
+        JetsonGPIO::JetsonGPIO
 )
 
 
