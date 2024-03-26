@@ -63,7 +63,6 @@ namespace Atom {
 
         int GPIO_PIN = 8;
         int gpioState = 0;
-        static volatile int interrupt = 1;
         unsigned long timestamp;
 
 
