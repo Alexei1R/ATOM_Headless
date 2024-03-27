@@ -5,9 +5,6 @@
 
 
 namespace Atom {
-    void GPIO_Callback();
-
-
     Application *Application::s_Instance = nullptr;
 
     Application::Application() {
@@ -121,30 +118,6 @@ namespace Atom {
         //60 , begin read gpio pin 8
         m_ServerLayer->RegisterMessageWithID(60, [&](Message message) {
             GPIO_PIN = *(int *) message.payload;
-            ATLOG_INFO("Message Received: ID = 60");
-            gpioState = gpioInitialise();
-            if (gpioState < 0) {
-                ATLOG_ERROR("Failed to initialize GPIO");
-            } else {
-                ATLOG_INFO("GPIO Initialized");
-            }
-
-
-            //set pin as input
-            gpioState = gpioSetMode(GPIO_PIN, JET_INPUT);
-            if (gpioState < 0) {
-                ATLOG_ERROR("Failed to set GPIO pin as input");
-            } else {
-                ATLOG_INFO("GPIO pin set as input");
-            }
-            int stat = gpioSetISRFunc(GPIO_PIN, EITHER_EDGE, 1000, &timestamp, &GPIO_Callback);
-            if (stat < 0) {
-                ATLOG_ERROR("Failed to set GPIO ISR function");
-            } else {
-                ATLOG_INFO("GPIO ISR function set");
-            }
-
-
 
         });
 
@@ -232,13 +205,6 @@ namespace Atom {
             std::cout << "Signal (" << signal << ") received. Shutting down." << std::endl;
             Application::GetApp().WindowClose(); // Set the running flag to false
         }
-    }
-
-
-    // GPIO Callback
-    void GPIO_Callback() {
-        ATLOG_INFO("GPIO Callback");
-
     }
 
 
