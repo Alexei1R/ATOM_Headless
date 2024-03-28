@@ -1,5 +1,8 @@
 #!/bin/bash
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$script_dir" || exit
+
 repo_owner="Alexei1R"
 repo_name="ATOM_Headless"
 auth_token="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"

@@ -26,8 +26,6 @@ set(SOURCES
         ATOM/Core/Layers/LayerStack.cpp
         ATOM/Core/Layers/LayerStack.h
         ATOM/Application.cpp
-        ATOM/GPIO/orin.c
-        ATOM/GPIO/jetgpio.h
 
 
 

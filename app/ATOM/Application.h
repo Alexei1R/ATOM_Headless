@@ -13,7 +13,6 @@
 #include "ATOM/Core/VideoServer/Frame.h"
 #include "ATOM/Core/ServerLayer.h"
 #include "ATOM/Lidar/LidarLayer.h"
-#include "ATOM/GPIO/jetgpio.h"
 
 
 namespace Atom {

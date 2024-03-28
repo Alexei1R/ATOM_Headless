@@ -10,6 +10,7 @@
 
 namespace Atom {
     class SerialCommunicationLayer : public Layer {
+        using SerialNewDataCallback = std::function<void(std::string data)>;
     public:
         SerialCommunicationLayer(std::string port, int baudrate);
         ~SerialCommunicationLayer();
@@ -20,6 +21,8 @@ namespace Atom {
         virtual void OnFixedUpdate() override;
 
         void SendData(std::string data);
+        void SetSerialNewDataCallback(const SerialNewDataCallback& function) { m_SerialNewDataCallback = function; }
+
 
 
 
@@ -27,6 +30,7 @@ namespace Atom {
         serial::Serial* m_Serial;
         std::string m_AccumulatedData;
         std::string m_AvailableSerialPorts;
+        SerialNewDataCallback m_SerialNewDataCallback;
     };
 
 

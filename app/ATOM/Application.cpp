@@ -121,6 +121,18 @@ namespace Atom {
 
         });
 
+        //Call back for new serial data
+        m_SerialCommunication->SetSerialNewDataCallback([&](std::string data) {
+            //If data first character or second caracter is % sent a message to client with id 66
+            if (data[0] == '%' || data[1] == '%') {
+                Message message;
+                message.id = 66;
+                message.payloadSize = data.size();
+                message.payload = (void *) data.c_str();
+                m_ServerLayer->SendMessage(message);
+            }
+        });
+
 
     }
 
@@ -139,7 +151,6 @@ namespace Atom {
         }
 
 
-        gpioTerminate();
 
 
 

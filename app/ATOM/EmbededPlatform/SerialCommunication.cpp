@@ -67,6 +67,9 @@ namespace Atom {
             if (m_Serial->available()) {
                 std::string data = m_Serial->read();
                 ATLOG_WARN("Data Received: {}", data);
+                if (m_SerialNewDataCallback) {
+                    m_SerialNewDataCallback(data);
+                }
                 m_Serial->flush();
             }
         }
