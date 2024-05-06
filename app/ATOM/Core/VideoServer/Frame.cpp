@@ -18,11 +18,20 @@ namespace Atom {
         }
     }
 
+    // void Frame::PushNewVideoWriterWithIP(std::string ip) {
+    //     m_VideoWriters.push_back(cv::VideoWriter(
+    //                 "appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=" + ip + " port=5000",
+    //                 0, cap.get(cv::CAP_PROP_FPS),
+    //                 cv::Size(m_FrameWidth,m_FrameHeight), true));
+    // }
+
+
     void Frame::PushNewVideoWriterWithIP(std::string ip) {
+        // Adjust the pipeline for better performance
         m_VideoWriters.push_back(cv::VideoWriter(
-                    "appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host=" + ip + " port=5000",
-                    0, cap.get(cv::CAP_PROP_FPS),
-                    cv::Size(m_FrameWidth,m_FrameHeight), true));
+            "appsrc ! videoconvert ! video/x-raw,format=I420 ! x264enc speed-preset=ultrafast tune=zerolatency ! rtph264pay ! udpsink host=" + ip + " port=5000",
+            0, cap.get(cv::CAP_PROP_FPS),
+            cv::Size(m_FrameWidth,m_FrameHeight), true));
     }
 
     void Frame::RemoveVideoWriterWithIP(std::string ip) {
