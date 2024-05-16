@@ -59,6 +59,8 @@ namespace Atom
         if(m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected()){
             ComputePid();
 
+            m_FindLines->PreprocessLine(m_LocalFrame);
+
             //id 84 left line points
             if (StartAutonomous)
             {
