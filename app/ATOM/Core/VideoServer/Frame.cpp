@@ -45,6 +45,13 @@ namespace Atom {
         }
     }
 
+    cv::Mat Frame::GetFrame()
+    {
+        //Get the frame
+        std::lock_guard<std::mutex> guard(frameCloneMutex);
+        return frame.clone();
+    }
+
     void Frame::OnAttach() {}
 
     void Frame::OnDetach() {}

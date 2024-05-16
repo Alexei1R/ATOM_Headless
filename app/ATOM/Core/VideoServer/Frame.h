@@ -24,6 +24,8 @@ namespace Atom {
 
         void PushNewVideoWriterWithIP(std::string ip);
         void RemoveVideoWriterWithIP(std::string ip);
+
+        cv::Mat GetFrame();
     private:
         void VideoProcessingThread();
 

@@ -45,6 +45,12 @@ set(serial_SRCS
         ATOM/Core/VideoServer/VideoServer.h
         ATOM/Lidar/LidarLayer.cpp
         ATOM/Lidar/LidarLayer.h
+        ATOM/RoadDetect/FindLines.cpp
+        ATOM/RoadDetect/FindLines.h
+        ATOM/RoadDetect/Autonomous.cpp
+        ATOM/RoadDetect/Autonomous.h
+        ATOM/PID/pid.cpp
+        ATOM/PID/pid.h
 
 
 )
