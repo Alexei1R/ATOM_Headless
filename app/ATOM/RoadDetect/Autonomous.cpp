@@ -56,7 +56,8 @@ namespace Atom
 
     void Autonomous::OnFixedUpdate()
     {
-        if(m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected()){
+        if (m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected())
+        {
             ComputePid();
 
 
@@ -74,17 +75,18 @@ namespace Atom
                 }
             }
         }
-
     }
 
     void Autonomous::ComputePid()
     {
+        m_LocalFrame = m_Frame->GetFrame();
+        if (!m_LocalFrame.empty())
+        {
+            //TODO: Remove this line ,is for testing
+            m_FindLines->PreprocessLine(m_LocalFrame);
+        }
         if (StartAutonomous)
         {
-            m_LocalFrame = m_Frame->GetFrame();
-            if(!m_LocalFrame.empty()){
-                m_FindLines->PreprocessLine(m_LocalFrame);
-            }
             if (!m_LocalFrame.empty())
             {
                 auto currentTimePid = std::chrono::high_resolution_clock::now();
