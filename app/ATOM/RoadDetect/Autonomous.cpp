@@ -56,36 +56,51 @@ namespace Atom
 
     void Autonomous::OnFixedUpdate()
     {
-        m_LocalFrame = m_Frame->GetFrame();
-        if (!m_LocalFrame.empty())
-        {
-            //TODO: Remove this line ,is for testing
-            m_FindLines->PreprocessLine(m_LocalFrame);
-        }
-
-        // ComputePid();
 
 
         //TODO: Remove this line ,is for testing
         //id 84 left line points
-        // if (StartAutonomous)
-        // {
-        auto ptsLeft = m_FindLines->GetLinePoints();
-        if (!ptsLeft.empty())
+        if (StartAutonomous)
         {
-            Message message;
-            message.id = 84;
-            message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
-            message.payload = static_cast<void*>(ptsLeft.data());
-            m_ServerLayer->SendMessage(message);
+            ComputePid();
+
+            auto ptsLeft = m_FindLines->GetLinePoints();
+            if (!ptsLeft.empty())
+            {
+                Message message;
+                message.id = 84;
+                message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
+                message.payload = static_cast<void*>(ptsLeft.data());
+                m_ServerLayer->SendMessage(message);
+            }
         }
-        // }
+        else
+        {
+            m_LocalFrame = m_Frame->GetFrame();
+            if (!m_LocalFrame.empty())
+            {
+                //TODO: Remove this line ,is for testing
+                m_FindLines->PreprocessLine(m_LocalFrame);
+            }
+
+            auto ptsLeft = m_FindLines->GetLinePoints();
+            if (!ptsLeft.empty())
+            {
+                Message message;
+                message.id = 84;
+                message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
+                message.payload = static_cast<void*>(ptsLeft.data());
+                m_ServerLayer->SendMessage(message);
+            }
+        }
     }
 
     void Autonomous::ComputePid()
     {
         if (StartAutonomous)
         {
+            m_LocalFrame = m_Frame->GetFrame();
+
             if (!m_LocalFrame.empty())
             {
                 auto currentTimePid = std::chrono::high_resolution_clock::now();
