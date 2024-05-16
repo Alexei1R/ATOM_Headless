@@ -56,35 +56,34 @@ namespace Atom
 
     void Autonomous::OnFixedUpdate()
     {
-        if (m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected())
-        {
-            ComputePid();
-
-
-            //id 84 left line points
-            if (StartAutonomous)
-            {
-                auto ptsLeft = m_FindLines->GetLinePoints();
-                if (!ptsLeft.empty())
-                {
-                    Message message;
-                    message.id = 84;
-                    message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
-                    message.payload = static_cast<void*>(ptsLeft.data());
-                    m_ServerLayer->SendMessage(message);
-                }
-            }
-        }
-    }
-
-    void Autonomous::ComputePid()
-    {
         m_LocalFrame = m_Frame->GetFrame();
         if (!m_LocalFrame.empty())
         {
             //TODO: Remove this line ,is for testing
             m_FindLines->PreprocessLine(m_LocalFrame);
         }
+
+        // ComputePid();
+
+
+        //TODO: Remove this line ,is for testing
+        //id 84 left line points
+        // if (StartAutonomous)
+        // {
+        auto ptsLeft = m_FindLines->GetLinePoints();
+        if (!ptsLeft.empty())
+        {
+            Message message;
+            message.id = 84;
+            message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
+            message.payload = static_cast<void*>(ptsLeft.data());
+            m_ServerLayer->SendMessage(message);
+        }
+        // }
+    }
+
+    void Autonomous::ComputePid()
+    {
         if (StartAutonomous)
         {
             if (!m_LocalFrame.empty())
