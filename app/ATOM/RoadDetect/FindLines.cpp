@@ -48,6 +48,8 @@ namespace Atom
 
     float FindLines::PreprocessLine(cv::Mat& org)
     {
+        m_PointsOnLine.clear();
+
         if (lastOffset != (lineSettings.offsetSides + lineSettings.bottomoffsetSides + lineSettings.topOffset +
             lineSettings.bottomOffset + int(lineSettings.leftLineSide * 10)))
         {
@@ -101,7 +103,7 @@ namespace Atom
         //        cv::GaussianBlur(processed, processed, cv::Size(5, 5), 0);
         //        cv::Canny(processed, processed, 50, 150);
 
-        std::vector<cv::Point2f> pts = slidingWindowLeft(processed, cv::Rect(0, 450, RectSize.x, RectSize.y));
+        std::vector<cv::Point2f> pts = slidingWindow(processed, cv::Rect(0, 450, RectSize.x, RectSize.y));
         cv::rectangle(original, cv::Rect(0, 450, RectSize.x, RectSize.y), cv::Scalar(0, 255, 0), 2);
         std::vector<cv::Point> allPts;
         std::vector<cv::Point2f> outPts;
@@ -113,7 +115,8 @@ namespace Atom
             allPts.push_back(cv::Point(outPts[i].x, outPts[i].y));
         }
         allPts.push_back(cv::Point(outPts[outPts.size() - 1].x, outPts[outPts.size() - 1].y));
-        pts = slidingWindowLeft(processed, cv::Rect(550, 450, RectSize.x, RectSize.y));
+
+        pts = slidingWindow(processed, cv::Rect(550, 450, RectSize.x, RectSize.y));
         cv::rectangle(original, cv::Rect(550, 450, RectSize.x, RectSize.y), cv::Scalar(0, 255, 0), 2);
         perspectiveTransform(pts, outPts, invertedPerspectiveMatrix);
 
@@ -126,6 +129,7 @@ namespace Atom
         }
         allPts.push_back(cv::Point(outPts[0].x - (outPts.size() - 1), outPts[0].y));
         std::vector<std::vector<cv::Point>> arr;
+
         arr.push_back(allPts);
         overlay = cv::Mat::zeros(original.size(), original.type());
         cv::fillPoly(overlay, arr, cv::Scalar(0, 255, 100));
@@ -141,11 +145,21 @@ namespace Atom
         laneCenterOffset = (leftOffset + rightOffset) / 2.0f;
 
 
+        //using perspective matrix to get the points back to the original image
+        //m_PointsOnLine
+        cv::perspectiveTransform(m_PointsOnLine, m_PointsOnLine, invertedPerspectiveMatrix);
+
+        m_PointsOnLineTransformed.clear();
+        for (unsigned int i = 0; i < m_PointsOnLine.size(); ++i)
+        {
+            m_PointsOnLineTransformed.push_back(cv::Point2i(m_PointsOnLine[i].x, m_PointsOnLine[i].y));
+        }
+
         return laneCenterOffset;
     }
 
 
-    std::vector<cv::Point2f> FindLines::slidingWindowLeft(cv::Mat image, cv::Rect window)
+    std::vector<cv::Point2f> FindLines::slidingWindow(cv::Mat image, cv::Rect window)
     {
         std::vector<cv::Point2f> points;
         const cv::Size imgSize = image.size();
@@ -167,6 +181,10 @@ namespace Atom
 
             cv::Point point(avgX, window.y + window.height * 0.1f);
             points.push_back(point);
+
+
+            m_PointsOnLine.push_back(point);
+
             window.y -= window.height;
             if (window.y < 0)
             {

@@ -30,9 +30,14 @@ namespace Atom
         float PreprocessLine(cv::Mat& original);
 
         void SetLineSettings(LineSettings settings) { lineSettings = settings; }
+        std::vector<cv::Point2i> GetLinePoints(){return m_PointsOnLineTransformed;}
 
     private:
-        std::vector<cv::Point2f> slidingWindowLeft(cv::Mat image, cv::Rect window);
+        std::vector<cv::Point2f> slidingWindow(cv::Mat image, cv::Rect window);
+    private:
+        std::vector<cv::Point2f> m_PointsOnLine;
+        std::vector<cv::Point2i> m_PointsOnLineTransformed;
+
         glm::vec<2, int> RectSize = glm::vec2(90, 30);
         cv::Mat original;
         glm::vec2 frameSize = glm::vec2(640, 480);

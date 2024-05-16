@@ -56,7 +56,24 @@ namespace Atom
 
     void Autonomous::OnFixedUpdate()
     {
-        ComputePid();
+        if(m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected()){
+            ComputePid();
+
+            //id 84 left line points
+            if (StartAutonomous)
+            {
+                auto ptsLeft = m_FindLines->GetLinePoints();
+                if (!ptsLeft.empty())
+                {
+                    Message message;
+                    message.id = 84;
+                    message.payloadSize = ptsLeft.size() * sizeof(cv::Point2i);
+                    message.payload = static_cast<void*>(ptsLeft.data());
+                    m_ServerLayer->SendMessage(message);
+                }
+            }
+        }
+
     }
 
     void Autonomous::ComputePid()
@@ -76,7 +93,7 @@ namespace Atom
                     m_PidOut = m_Pid->calculate(0, m_FindLines->PreprocessLine(m_LocalFrame) / 2,
                                                 deltaTime, m_MaxSteering, -m_MaxSteering);
                     m_PidOut = std::clamp(m_PidOut, -m_MaxSteering, m_MaxSteering);
-                    ATLOG_INFO("PID Out: {0}", m_PidOut)
+                    // ATLOG_INFO("PID Out: {0}", m_PidOut)
                 }
             }
 

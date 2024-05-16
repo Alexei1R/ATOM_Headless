@@ -27,6 +27,9 @@ namespace Atom {
         virtual void OnUpdate()     override;
         virtual void OnFixedUpdate()override;
 
+        bool IsServerRunning() { return m_Server->IsRunning(); }
+        bool IsAnyClientConnected() { return m_Server->IsAnyClientConnected(); }
+
         void SetServerConnectedCallback(const ServerConnectedCallback& function) { m_ServerConnectedCallback = function; }
         void SetServerDisconnectedCallback(const ServerDisconnectedCallback& function) { m_ServerDisconnectedCallback = function; }
         void RegisterMessageWithID(uint8_t id, const std::function<void(Message message)>& function){ m_RegistedMessageCallbacks.push_back({{id,function}}); }

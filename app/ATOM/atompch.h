@@ -52,9 +52,10 @@ struct LineSettings {
     int offsetSides = 172;
     int topOffset = 144;
     int bottomoffsetSides = 120;
-    int bottomOffset = 300789;
+    int bottomOffset = 275;
     float  leftLineSide = 0.5;
-    cv::Scalar lowerWhite = cv::Scalar(190,200,200);
+    cv::Scalar lowerWhite = cv::Scalar(150,200,200);
+    // cv::Scalar lowerWhite = cv::Scalar(190,200,200);
     cv::Scalar upperWhite = cv::Scalar(255, 255, 255);
     bool showDebug = true;
 };

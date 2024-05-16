@@ -134,6 +134,12 @@ namespace Atom {
                 message.payloadSize = data.size();
                 message.payload = (void *) data.c_str();
                 m_ServerLayer->SendMessage(message);
+
+                //stop the car
+                    std::stringstream commandStream;
+                    commandStream << std::fixed << std::setprecision(2) << "#1:" << 0.0 << ";;";
+                    std::string command = commandStream.str();
+                    m_SerialCommunication->SendData(command);
             }
         });
 
