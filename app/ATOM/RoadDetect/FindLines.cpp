@@ -147,17 +147,17 @@ namespace Atom
 
         //using perspective matrix to get the points back to the original image
         //m_PointsOnLine
-        cv::perspectiveTransform(m_PointsOnLine, m_PointsOnLine, invertedPerspectiveMatrix);
+        // cv::perspectiveTransform(m_PointsOnLine, m_PointsOnLine, invertedPerspectiveMatrix);
+        //
+        // m_PointsOnLineTransformed.clear();
+        // for (unsigned int i = 0; i < m_PointsOnLine.size(); ++i)
+        // {
+        //     m_PointsOnLineTransformed.push_back(cv::Point2i(m_PointsOnLine[i].x, m_PointsOnLine[i].y));
+        // }
 
-        m_PointsOnLineTransformed.clear();
-        for (unsigned int i = 0; i < m_PointsOnLine.size(); ++i)
-        {
-            m_PointsOnLineTransformed.push_back(cv::Point2i(m_PointsOnLine[i].x, m_PointsOnLine[i].y));
-        }
-
-
-        //copy the processed image to  org
-        processed.copyTo(org);
+        //
+        // //copy the processed image to  org
+        // processed.copyTo(org);
 
         return laneCenterOffset;
     }
