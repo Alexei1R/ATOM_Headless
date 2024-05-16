@@ -4,7 +4,7 @@
 SERVICE_FILE="/etc/systemd/system/wifi-hotspot.service"
 
 # Define the path to the Wi-Fi script
-WIFI_SCRIPT="/home/toor/Code/wifi.sh"
+WIFI_SCRIPT="/home/toor/Code/ATOM_Headless/wifi.sh"
 
 # Create the service unit file
 cat <<EOF | sudo tee "$SERVICE_FILE" > /dev/null
