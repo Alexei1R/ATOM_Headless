@@ -56,8 +56,7 @@ namespace Atom
 
     void Autonomous::OnFixedUpdate()
     {
-        if (m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected())
-        {
+        if(m_ServerLayer->IsServerRunning() && m_ServerLayer->IsAnyClientConnected()){
             ComputePid();
 
 
@@ -75,15 +74,18 @@ namespace Atom
                 }
             }
         }
+
     }
 
     void Autonomous::ComputePid()
     {
-        m_LocalFrame = m_Frame->GetFrame();
-        if (!m_LocalFrame.empty())
+        if (StartAutonomous)
         {
-            m_FindLines->PreprocessLine(m_LocalFrame);
-            if (StartAutonomous)
+            m_LocalFrame = m_Frame->GetFrame();
+            if(!m_LocalFrame.empty()){
+                m_FindLines->PreprocessLine(m_LocalFrame);
+            }
+            if (!m_LocalFrame.empty())
             {
                 auto currentTimePid = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<double, std::milli> timeSpanPid =
@@ -97,24 +99,24 @@ namespace Atom
                     m_PidOut = std::clamp(m_PidOut, -m_MaxSteering, m_MaxSteering);
                     // ATLOG_INFO("PID Out: {0}", m_PidOut)
                 }
+            }
 
-                auto currentTimeComand = std::chrono::high_resolution_clock::now();
-                std::chrono::duration<double, std::milli> timeSpanComand =
-                    currentTimeComand - lastTimeCommand;
-                if (timeSpanComand.count() > 25)
+            auto currentTimeComand = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> timeSpanComand =
+                currentTimeComand - lastTimeCommand;
+            if (timeSpanComand.count() > 25)
+            {
+                lastTimeCommand = std::chrono::high_resolution_clock::now();
+                //alterate between speed and steering
+                if (m_Alterate)
                 {
-                    lastTimeCommand = std::chrono::high_resolution_clock::now();
-                    //alterate between speed and steering
-                    if (m_Alterate)
-                    {
-                        ComandCarSpeed(m_MaxSpeed);
-                        m_Alterate = false;
-                    }
-                    else
-                    {
-                        ComandCarSteering(m_PidOut);
-                        m_Alterate = true;
-                    }
+                    ComandCarSpeed(m_MaxSpeed);
+                    m_Alterate = false;
+                }
+                else
+                {
+                    ComandCarSteering(m_PidOut);
+                    m_Alterate = true;
                 }
             }
         }
