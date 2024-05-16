@@ -113,7 +113,6 @@ namespace Atom
                     m_PidOut = m_Pid->calculate(0, m_FindLines->PreprocessLine(m_LocalFrame) / 2,
                                                 deltaTime, m_MaxSteering, -m_MaxSteering);
                     m_PidOut = std::clamp(m_PidOut, -m_MaxSteering, m_MaxSteering);
-                    ATLOG_INFO("PID Out: {0}", m_PidOut)
                 }
             }
 
