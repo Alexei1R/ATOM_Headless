@@ -26,6 +26,8 @@ namespace Atom {
 
         void SetLineSettings(LineSettings settings);
 
+        cv::Mat& GetPreprocessed() {return m_FindLines->GetPreprocessed();}
+
 
 
         
@@ -79,6 +81,7 @@ namespace Atom {
         ServerLayer* m_ServerLayer;
         Frame* m_Frame;
         cv::Mat m_LocalFrame;
+        cv::Mat m_Preprocessed;
 
 
 

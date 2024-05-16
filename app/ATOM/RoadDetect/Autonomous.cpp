@@ -52,13 +52,15 @@ namespace Atom
 
     void Autonomous::OnUpdate()
     {
+
     }
 
     void Autonomous::OnFixedUpdate()
     {
 
+        m_LocalFrame = m_Frame->GetFrame();
 
-        //TODO: Remove this line ,is for testing
+
         //id 84 left line points
         if (StartAutonomous)
         {
@@ -76,10 +78,8 @@ namespace Atom
         }
         else
         {
-            m_LocalFrame = m_Frame->GetFrame();
             if (!m_LocalFrame.empty())
             {
-                //TODO: Remove this line ,is for testing
                 m_FindLines->PreprocessLine(m_LocalFrame);
             }
 
@@ -113,7 +113,7 @@ namespace Atom
                     m_PidOut = m_Pid->calculate(0, m_FindLines->PreprocessLine(m_LocalFrame) / 2,
                                                 deltaTime, m_MaxSteering, -m_MaxSteering);
                     m_PidOut = std::clamp(m_PidOut, -m_MaxSteering, m_MaxSteering);
-                    // ATLOG_INFO("PID Out: {0}", m_PidOut)
+                    ATLOG_INFO("PID Out: {0}", m_PidOut)
                 }
             }
 
@@ -142,6 +142,7 @@ namespace Atom
     {
         m_FindLines->SetLineSettings(settings);
     }
+
 
     void Autonomous::ComandCarSpeed(float speed)
     {

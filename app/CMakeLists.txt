@@ -45,8 +45,6 @@ set(serial_SRCS
         ATOM/Core/VideoServer/Frame.h
         ATOM/Core/ServerLayer.cpp
         ATOM/Core/ServerLayer.h
-        ATOM/Core/VideoServer/VideoServer.cpp
-        ATOM/Core/VideoServer/VideoServer.h
         ATOM/Lidar/LidarLayer.cpp
         ATOM/Lidar/LidarLayer.h
 

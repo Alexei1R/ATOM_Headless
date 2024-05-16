@@ -155,6 +155,10 @@ namespace Atom
             m_PointsOnLineTransformed.push_back(cv::Point2i(m_PointsOnLine[i].x, m_PointsOnLine[i].y));
         }
 
+
+        //copy the processed image to  org
+        processed.copyTo(org);
+
         return laneCenterOffset;
     }
 

@@ -28,7 +28,7 @@ namespace Atom
         LineSettings& GetLineSettings() { return lineSettings; }
         glm::vec<2, int>& GetRectSize() { return RectSize; }
         float PreprocessLine(cv::Mat& original);
-
+        cv::Mat& GetProcessed() { return processed; }
         void SetLineSettings(LineSettings settings) { lineSettings = settings; }
         std::vector<cv::Point2i> GetLinePoints(){return m_PointsOnLineTransformed;}
 

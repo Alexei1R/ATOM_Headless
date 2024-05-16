@@ -63,10 +63,7 @@ namespace Atom
 
     void Frame::OnUpdate()
     {
-        // if (!frame.empty()) {
-        //     cv::imshow("Frame", frame);
-        //     cv::waitKey(1);
-        // }
+
     }
 
     void Frame::OnFixedUpdate()

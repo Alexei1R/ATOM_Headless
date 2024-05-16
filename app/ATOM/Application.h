@@ -37,6 +37,9 @@ namespace Atom {
         inline static Application& GetApp() { return *s_Instance; }
         void WindowClose();
 
+        [[nodiscard]] inline Autonomous &GetAutonomous() const { return *m_Autonomous; }
+
+
     private:
         static void SignalHandler(int signal);
     private:
