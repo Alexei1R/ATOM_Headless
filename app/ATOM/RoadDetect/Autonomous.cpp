@@ -97,24 +97,24 @@ namespace Atom
                     m_PidOut = std::clamp(m_PidOut, -m_MaxSteering, m_MaxSteering);
                     // ATLOG_INFO("PID Out: {0}", m_PidOut)
                 }
-            }
 
-            auto currentTimeComand = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> timeSpanComand =
-                currentTimeComand - lastTimeCommand;
-            if (timeSpanComand.count() > 25)
-            {
-                lastTimeCommand = std::chrono::high_resolution_clock::now();
-                //alterate between speed and steering
-                if (m_Alterate)
+                auto currentTimeComand = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> timeSpanComand =
+                    currentTimeComand - lastTimeCommand;
+                if (timeSpanComand.count() > 25)
                 {
-                    ComandCarSpeed(m_MaxSpeed);
-                    m_Alterate = false;
-                }
-                else
-                {
-                    ComandCarSteering(m_PidOut);
-                    m_Alterate = true;
+                    lastTimeCommand = std::chrono::high_resolution_clock::now();
+                    //alterate between speed and steering
+                    if (m_Alterate)
+                    {
+                        ComandCarSpeed(m_MaxSpeed);
+                        m_Alterate = false;
+                    }
+                    else
+                    {
+                        ComandCarSteering(m_PidOut);
+                        m_Alterate = true;
+                    }
                 }
             }
         }
