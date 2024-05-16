@@ -22,6 +22,10 @@ namespace Atom {
         virtual void OnUpdate() override;
         virtual void OnFixedUpdate() override;
 
+
+
+        cv::Mat GetFrame();
+
         void PushNewVideoWriterWithIP(std::string ip);
         void RemoveVideoWriterWithIP(std::string ip);
     private:

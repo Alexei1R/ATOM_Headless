@@ -24,6 +24,10 @@ namespace Atom {
         m_Frame = new Frame();
         PushLayer(m_Frame);
 
+        m_Autonomous = new Autonomous(m_SerialCommunication, m_ServerLayer, m_Frame);
+        PushLayer(m_Autonomous);
+
+
 
         std::string port = "/dev/ttyACM0";
         int result = chmod(port.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);

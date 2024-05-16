@@ -41,6 +41,24 @@
 #include <signal.h>
 #endif
 
+#include "opencv2/opencv.hpp"
+
+
+struct LineSettings {
+    int circleSize = 168;
+    int circlePosition = 384;
+    bool filledCircle = true;
+
+    int offsetSides = 172;
+    int topOffset = 144;
+    int bottomoffsetSides = 120;
+    int bottomOffset = 300789;
+    float  leftLineSide = 0.5;
+    cv::Scalar lowerWhite = cv::Scalar(190,200,200);
+    cv::Scalar upperWhite = cv::Scalar(255, 255, 255);
+    bool showDebug = true;
+};
+
 
 
 #endif //ATOM_ATOMPCH_H

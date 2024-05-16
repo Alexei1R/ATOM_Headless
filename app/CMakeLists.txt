@@ -1,10 +1,8 @@
 project(ATOM)
 
 
-find_package(OpenCV REQUIRED )
+find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
-
-
 
 
 set(SOURCES
@@ -27,6 +25,12 @@ set(SOURCES
         ATOM/Core/Layers/LayerStack.h
         ATOM/Application.cpp
 
+        ATOM/RoadDetect/FindLines.cpp
+        ATOM/RoadDetect/Autonomous.cpp
+        ATOM/RoadDetect/Autonomous.h
+        ATOM/RoadDetect/FindLines.h
+        ATOM/PID/pid.cpp
+        ATOM/PID/pid.h
 
 
 )
@@ -48,38 +52,37 @@ set(serial_SRCS
 
 
 )
-if(APPLE)
- # If OSX
- list(APPEND
-         Communication/Serial/impl/unix.cpp
-         Communication/Serial/impl/unix.h)
+if (APPLE)
+    # If OSX
+    list(APPEND
+            Communication/Serial/impl/unix.cpp
+            Communication/Serial/impl/unix.h)
 
- list(APPEND serial_SRCS
-         Communication/Serial/impl/list_ports/lists_ports_osx.cpp
- )
+    list(APPEND serial_SRCS
+            Communication/Serial/impl/list_ports/lists_ports_osx.cpp
+    )
 
-elseif(UNIX)
- # If unix
- list(APPEND serial_SRCS
-         Communication/Serial/impl/unix.cpp
-         Communication/Serial/impl/unix.h)
+elseif (UNIX)
+    # If unix
+    list(APPEND serial_SRCS
+            Communication/Serial/impl/unix.cpp
+            Communication/Serial/impl/unix.h)
 
- list(APPEND serial_SRCS
-         Communication/Serial/impl/list_ports/lists_ports_linux.cpp)
-else()
- # If windows
- list(APPEND serial_SRCS
-         Communication/Serial/impl/win.cpp
-         Communication/Serial/impl/win.h)
- list(APPEND serial_SRCS
-         Communication/Serial/impl/list_ports/lists_ports_win.cpp)
-endif()
+    list(APPEND serial_SRCS
+            Communication/Serial/impl/list_ports/lists_ports_linux.cpp)
+else ()
+    # If windows
+    list(APPEND serial_SRCS
+            Communication/Serial/impl/win.cpp
+            Communication/Serial/impl/win.h)
+    list(APPEND serial_SRCS
+            Communication/Serial/impl/list_ports/lists_ports_win.cpp)
+endif ()
 
 file(GLOB LIDAR_SOURCES
         "Communication/oradar/*.cpp"
         "Communication/oradar/*.h"
 )
-
 
 
 add_executable(executable_headless ${SOURCES} ${serial_SRCS} ${LIDAR_SOURCES})
@@ -91,7 +94,6 @@ target_link_libraries(executable_headless
         ${OpenCV_LIBS}
         Threads::Threads
 )
-
 
 
 target_include_directories(executable_headless PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/)

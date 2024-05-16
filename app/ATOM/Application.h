@@ -13,6 +13,7 @@
 #include "ATOM/Core/VideoServer/Frame.h"
 #include "ATOM/Core/ServerLayer.h"
 #include "ATOM/Lidar/LidarLayer.h"
+#include "ATOM/RoadDetect/Autonomous.h"
 
 
 namespace Atom {
@@ -54,7 +55,7 @@ namespace Atom {
 
         std::vector<CameraUsers> m_CameraUsers;
         bool m_IsCameraOpen = false;
-
+        Autonomous* m_Autonomous;
 
         Atom::ServerLayer* m_ServerLayer;
         Frame* m_Frame;
