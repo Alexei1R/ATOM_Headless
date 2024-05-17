@@ -156,12 +156,39 @@ namespace Atom
                 message.payloadSize = data.size();
                 message.payload = (void*)data.c_str();
                 m_ServerLayer->SendMessage(message);
+                if(StartAutonomous == true)
+                {
+                    //stop the car
+                    std::stringstream commandStream;
+                    commandStream << std::fixed << std::setprecision(2) << "#1:" << 0.0 << ";;";
+                    std::string command = commandStream.str();
+                    m_SerialCommunication->SendData(command);
+                }
+                else
+                {
+                    ATLOG_WARN("STOP IN NOT AUTONOMOUS MODE")
+                }
+            }
+        });
 
-                //stop the car
-                std::stringstream commandStream;
-                commandStream << std::fixed << std::setprecision(2) << "#1:" << 0.0 << ";;";
-                std::string command = commandStream.str();
-                m_SerialCommunication->SendData(command);
+
+
+        m_ServerLayer->RegisterMessageWithID(87, [&](Message message)
+        {
+            int data = *static_cast<int*>(message.payload);
+            if (data == 1)
+            {
+                ATLOG_WARN("Start Autonomous");
+                StartAutonomous = true;
+            }
+            else if (data == 2)
+            {
+                ATLOG_WARN("Stop Autonomous");
+                StartAutonomous = false;
+            }
+            else
+            {
+                ATLOG_ERROR("Invalid data: {0}", data);
             }
         });
     }

@@ -68,6 +68,8 @@ namespace Atom {
         int gpioState = 0;
         unsigned long timestamp;
 
+        bool StartAutonomous = false;
+
 
 
     };
